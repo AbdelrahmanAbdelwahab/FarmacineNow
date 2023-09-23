@@ -92,6 +92,7 @@ struct CalculateButtonSection: View {
     }
 
     private func calculate() {
+        // Calculate BMR
         guard let ageValue = Double(age),
               let weightValue = Double(weight),
               let heightValue = Double(height),
@@ -120,6 +121,14 @@ struct CalculateButtonSection: View {
         let daysToReachGoal = caloriesDifference / dailyCaloriesNeeded
 
         result = String(format: "Your daily caloric needs (BMR) are: %.2f calories.\nTo reach your goal, it will take approximately %.1f days.", bmr, daysToReachGoal)
+        
+        // Calculate BMI
+        if let weightValue = Double(weight),
+           let heightValue = Double(height) {
+            let heightInMeters = heightValue / 100
+            let bmi = weightValue / (heightInMeters * heightInMeters)
+            result += String(format: "\n\nYour BMI is: %.2f", bmi)
+        }
     }
 }
 
