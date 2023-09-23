@@ -1,0 +1,5 @@
+name: Website
+root: ~/dev/jnctn/Website
+windows:
+  - Editor: nvim
+  - Build: gatsby build

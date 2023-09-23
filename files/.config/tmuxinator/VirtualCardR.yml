@@ -1,0 +1,5 @@
+name: VirtualCardR
+root: ~/dev/jnctn/virtual-card-r
+windows:
+  - Editor: nvim
+  - Dev: yarn start

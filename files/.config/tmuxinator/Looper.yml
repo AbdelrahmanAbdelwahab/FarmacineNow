@@ -1,0 +1,5 @@
+name: Looper
+root: ~/dev/looper
+windows:
+  - Editor: nvim
+  - Build: yarn start
