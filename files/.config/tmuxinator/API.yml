@@ -1,4 +1,0 @@
-name: API
-root: ~/dev/jnctn/API
-windows:
-  - Editor: nvim

@@ -1,5 +1,0 @@
-name: JNCTN-UX-Portal
-root: ~/dev/jnctn/JNCTN-UX/apps/jnctn-portal
-windows:
-  - Editor: nvim
-  - Dev: cd ../.. && yarn nx serve jnctn-portal

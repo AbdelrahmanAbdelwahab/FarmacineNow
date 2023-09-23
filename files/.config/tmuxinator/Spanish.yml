@@ -1,4 +1,0 @@
-name: Spanish
-root: ~/Documents/Spanish
-windows:
-  - Editor: nvim
