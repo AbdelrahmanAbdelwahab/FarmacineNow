@@ -15,14 +15,16 @@ struct ContentView: View {
     @State private var result = ""
     @State private var target = ""
     @State private var isWeightGain = true
-
+    @State private var bmi = ""
+    @State private var bmiColor: Color = .white
+    
     var body: some View {
         NavigationView {
             Form {
                 PersonalInfoSection(age: $age, gender: $gender, weight: $weight, height: $height)
                 GoalSection(isWeightGain: $isWeightGain, target: $target)
-                CalculateButtonSection(isWeightGain: $isWeightGain, age: $age, gender: $gender, weight: $weight, height: $height, target: $target, result: $result)
-                ResultSection(result: $result)
+                CalculateButtonSection(isWeightGain: $isWeightGain, age: $age, gender: $gender, weight: $weight, height: $height, target: $target, result: $result, bmi: $bmi, bmiStateColor: $bmiColor)
+                ResultSection(result: $result, bmi: $bmi, bmiColor: bmiColor)
             }
             .navigationBarTitle("Weight Management")
         }
@@ -82,6 +84,8 @@ struct CalculateButtonSection: View {
     @Binding var height: String
     @Binding var target: String
     @Binding var result: String
+    @Binding var bmi: String // Add BMI state variable
+    @Binding var bmiStateColor: Color // Add BMI state Color
 
     var body: some View {
         Section {
@@ -126,18 +130,57 @@ struct CalculateButtonSection: View {
         if let weightValue = Double(weight),
            let heightValue = Double(height) {
             let heightInMeters = heightValue / 100
-            let bmi = weightValue / (heightInMeters * heightInMeters)
-            result += String(format: "\n\nYour BMI is: %.2f", bmi)
+            let bmiValue = weightValue / (heightInMeters * heightInMeters)
+            bmi = String(format: "Your BMI is: %.2f", bmiValue)
+            
+            // Determine BMI color based on the BMI value
+            let bmiColor: Color = {
+                switch bmiValue {
+                case ..<18.5:
+                    return .blue // Underweight
+                case 18.5..<24.9:
+                    return .green // Normal weight
+                case 24.9..<29.9:
+                    return .orange // Overweight
+                default:
+                    return .red // Obese
+                }
+            }()
+            
+            bmiStateColor = bmiColor
+            
+            // Append BMI with color to the result
+            result = String(format: "Your daily caloric needs (BMR) are: %.2f calories.\nTo reach your goal, it will take approximately %.1f days.", bmr, daysToReachGoal)
         }
     }
 }
 
-struct ResultSection: View {
-    @Binding var result: String
+struct BMIColorView: View {
+    var bmiColor: Color
 
     var body: some View {
-        Section(header: Text("Result")) {
-            Text(result)
-        }
+        Circle()
+            .foregroundColor(bmiColor)
+            .frame(width: 50, height: 50) // Set the desired size of the color indicator
     }
+}
+
+
+struct ResultSection: View {
+    @Binding var result: String
+    @Binding var bmi: String // Add BMI state variable
+    var bmiColor: Color // Add BMI color state variable
+
+    var body: some View {
+           Section(header: Text("Result")) {
+               Text(result)
+                   .foregroundColor(.white) // Set the text color to black
+               if !bmi.isEmpty {
+                   Text(bmi)
+                       .foregroundColor(bmiColor) // Set the BMI text color to red (you can change this color)
+                   BMIColorView(bmiColor: bmiColor) // Display the color indicator
+
+               }
+           }
+       }
 }
